@@ -2,68 +2,44 @@ global proc jaLinearRedistribute(int $lookAt){
     global int $lineaRedestriSJtrigger; //scriptJob Variable
     string $lrSelection[] = `ls -os`;
     int $lrSelSize = size($lrSelection);
-    //initial expression
-    string $lookAtVariables;
-    string $AngleNulIni = " ";
-    string $AngleNulEnd = " ";
-    string $AimConstraintIni[];
-    string $AimConstraintEnd[];
-    //vector $initialAngle;
-    if ($lookAt){
-        $AngleNulIni = `group -em`;
-        $AngleNulEnd = `group -em`;
-        string $parentIni[] = `listRelatives -p $lrSelection[0]`;
-        if (size($parentIni)){
-        parent $AngleNulEnd $AngleNulIni $parentIni[0];
-        }
-        $AimConstraintIni = `aimConstraint $lrSelection[0] $AngleNulIni`;
-        $AimConstraintEnd = `aimConstraint $lrSelection[0] $AngleNulEnd`;
-        $lookAtVariables = $AngleNulEnd + ".translateX = ((($director.x) / 2) + $pos2.x); \n" +
-                           $AngleNulEnd + ".translateY = ((($director.y) / 2) + $pos2.y); \n" +
-                           $AngleNulEnd + ".translateZ = ((($director.z) / 2) + $pos2.z); \n" +
-                           $AimConstraintEnd[0] + ".offsetX = $rotate2.x; \n" +
-                           $AimConstraintEnd[0] + ".offsetY = $rotate2.y; \n" +
-                           $AimConstraintEnd[0]+ ".offsetZ = $rotate2.z; \n" +
-                           $AngleNulIni + ".translateX = ((($director.x) / 2) + $pos2.x); \n" +
-                           $AngleNulIni + ".translateY = ((($director.y) / 2) + $pos2.y); \n" +
-                           $AngleNulIni + ".translateZ = ((($director.z) / 2) + $pos2.z); \n" +
-                           $AimConstraintIni[0] + ".offsetX = $rotate1.x; \n" +
-                           $AimConstraintIni[0] + ".offsetY = $rotate1.y; \n" +
-                           $AimConstraintIni[0]+ ".offsetZ = $rotate1.z; \n" +
-                           "vector $rotateAimIni =<<"+$AngleNulIni+ ".rotateX," + $AngleNulIni+ ".rotateY,"+$AngleNulIni+ ".rotateZ>>; \n"+
-                           "vector $rotateAimEnd =<<"+ $AngleNulEnd + ".rotateX," + $AngleNulEnd + ".rotateY,"+ $AngleNulEnd + ".rotateZ>>; \n" +
-                           "vector $rotateAimDif = $rotateAimIni - $rotateAimEnd; \n";
-    }
-    string $lrExpresion = "vector $pos1 = <<" + $lrSelection[0] + ".translateX, "+ $lrSelection[0] + ".translateY, " + $lrSelection[0] + ".translateZ>>; \n" +
-    "vector $pos2 = <<" + $lrSelection[($lrSelSize - 1)] + ".translateX, "+ $lrSelection[($lrSelSize - 1)] + ".translateY, " + $lrSelection[($lrSelSize - 1)] + ".translateZ>>; \n" +
-    "vector $director = $pos1 - $pos2; \n" +
     
-    "vector $rotate1 = <<" + $lrSelection[0] + ".rotateX, "+ $lrSelection[0] + ".rotateY, " + $lrSelection[0] + ".rotateZ>>; \n" +
-    "vector $rotate2 = <<" + $lrSelection[($lrSelSize - 1)] + ".rotateX, "+ $lrSelection[($lrSelSize - 1)] + ".rotateY, " + $lrSelection[($lrSelSize - 1)] + ".rotateZ>>; \n" +
-    "vector $rotateDif = $rotate1 - $rotate2; \n" +
-    
-    "vector $scale1 = <<" + $lrSelection[0] + ".scaleX, "+ $lrSelection[0] + ".scaleY, " + $lrSelection[0] + ".scaleZ>>; \n" +
-    "vector $scale2 = <<" + $lrSelection[($lrSelSize - 1)] + ".scaleX, "+ $lrSelection[($lrSelSize - 1)] + ".scaleY, " + $lrSelection[($lrSelSize - 1)] + ".scaleZ>>; \n" +
-    "vector $scaleDif = $scale1 - $scale2; \n" + $lookAtVariables;
+   
     if($lrSelSize < 3){
         print ("please select at least three objects");
     }
     else{
+         //initial expression 
+        string $lrExpresion = "vector $pos1 = <<" + $lrSelection[0] + ".translateX, "+ $lrSelection[0] + ".translateY, " + $lrSelection[0] + ".translateZ>>; \n" +
+        "vector $pos2 = <<" + $lrSelection[($lrSelSize - 1)] + ".translateX, "+ $lrSelection[($lrSelSize - 1)] + ".translateY, " + $lrSelection[($lrSelSize - 1)] + ".translateZ>>; \n" +
+        "vector $director = $pos1 - $pos2; \n" +
+        
+        "vector $rotate1 = <<" + $lrSelection[0] + ".rotateX, "+ $lrSelection[0] + ".rotateY, " + $lrSelection[0] + ".rotateZ>>; \n" +
+        "vector $rotate2 = <<" + $lrSelection[($lrSelSize - 1)] + ".rotateX, "+ $lrSelection[($lrSelSize - 1)] + ".rotateY, " + $lrSelection[($lrSelSize - 1)] + ".rotateZ>>; \n" +
+        "vector $rotateDif = $rotate1 - $rotate2; \n" +
+        
+        "vector $scale1 = <<" + $lrSelection[0] + ".scaleX, "+ $lrSelection[0] + ".scaleY, " + $lrSelection[0] + ".scaleZ>>; \n" +
+        "vector $scale2 = <<" + $lrSelection[($lrSelSize - 1)] + ".scaleX, "+ $lrSelection[($lrSelSize - 1)] + ".scaleY, " + $lrSelection[($lrSelSize - 1)] + ".scaleZ>>; \n" +
+        "vector $scaleDif = $scale1 - $scale2; \n";
+        //store constraints
+        string $storeConstraints;
         //construct expression
         for ($i=1; ($i<($lrSelSize - 1)); $i++){
              string $lrExpresionAdd;
-            if ($lookAt){
+            if ($lookAt){ //wih aim constraint
+                     string $aimConstraintIni[]=`aimConstraint  $lrSelection[0] $lrSelection[$i]`;
                      $lrExpresionAdd = $lrSelection[$i] + ".translateX = ((($director.x)/" + ($lrSelSize -1)+ ") * " + $i + " + $pos2.x); \n" +
                                      $lrSelection[$i] + ".translateY = ((($director.y)/" + ($lrSelSize -1)+ ") * " + $i + " + $pos2.y); \n" +
                                      $lrSelection[$i] + ".translateZ = ((($director.z)/" + ($lrSelSize -1)+ ") * " + $i + " + $pos2.z); \n" +
                                      //rotate expression
-                                     $lrSelection[$i] + ".rotateX = ((($rotateAimDif.x)/" + ($lrSelSize -1)+") * " + $i + "+ $rotateAimEnd.x); \n" +
-                                     $lrSelection[$i] + ".rotateY = ((($rotateAimDif.y)/" + ($lrSelSize -1)+") * " + $i + "+ $rotateAimEnd.y); \n" +
-                                     $lrSelection[$i] + ".rotateZ = ((($rotateAimDif.z)/" + ($lrSelSize -1)+") * " + $i + "+ $rotateAimEnd.z); \n" +
+                                     $aimConstraintIni[0] + ".offsetX = (((($rotateDif.x) /" + ($lrSelSize -1)+ ") * " + $i + "+ $rotate2.x)); \n" +
+                                     $aimConstraintIni[0] + ".offsetY = (((($rotateDif.y) /" + ($lrSelSize -1)+ ") * " + $i + "+ $rotate2.y)); \n" +
+                                     $aimConstraintIni[0] + ".offsetZ = (((($rotateDif.z) /" + ($lrSelSize -1)+ ") * " + $i + "+ $rotate2.z)); \n" +
                                      //scale expression
                                      $lrSelection[$i] + ".scaleX = ((($scaleDif.x) /" + ($lrSelSize -1)+ ") * " + $i + "+ $scale2.x); \n" +
                                      $lrSelection[$i] + ".scaleY = ((($scaleDif.y) /" + ($lrSelSize -1)+ ") * " + $i + "+ $scale2.y); \n" +
                                      $lrSelection[$i] + ".scaleZ = ((($scaleDif.z) /" + ($lrSelSize -1)+ ") * " + $i + "+ $scale2.z); \n";
+                     $storeConstraints= ($i == ($lrSelSize - 2)) ? ($storeConstraints + "\"" + $aimConstraintIni[0]+"\"") : ($storeConstraints + "\"" + $aimConstraintIni[0]+"\",") ;
+                     
                 }
             else{
                      $lrExpresionAdd = $lrSelection[$i] + ".translateX = ((($director.x) /" + ($lrSelSize -1)+ ") * " + $i + "+ $pos2.x); \n" +
@@ -82,14 +58,13 @@ global proc jaLinearRedistribute(int $lookAt){
            
             $lrExpresion = $lrExpresion + $lrExpresionAdd;
         }
-        print $lrExpresion ;
+        print $storeConstraints;
         expression -s $lrExpresion  -o "" -n "jaLinearRedistribute" -ae 1 -uc all;
-    }
-    select -r $lrSelection[($lrSelSize-1)];
-    //launch spript Job
-     if (( $lineaRedestriSJtrigger)){
-          scriptJob -f -kill $lineaRedestriSJtrigger;
-          //print "job deleted \n";
+        select -r $lrSelection[($lrSelSize-1)];
+        //launch spript Job
+         if (( $lineaRedestriSJtrigger)){
+              scriptJob -f -kill $lineaRedestriSJtrigger;
+             }
+         $lineaRedestriSJtrigger = `scriptJob -kws -pro -e "SelectionChanged" ("jaLinearRedBake(\"" + $lrSelection[0]+ "\",\"" + $lrSelection[($lrSelSize-1)] + "\",{" + $storeConstraints +"})")`;
       }
-    $lineaRedestriSJtrigger = `scriptJob -kws -pro -e "SelectionChanged" ("jaLinearRedBake(\"" + $lrSelection[0]+ "\",\"" + $lrSelection[($lrSelSize-1)] + "\",\"" + $AngleNulEnd +"\",\"" +$AngleNulIni+ "\") ")`;
 }

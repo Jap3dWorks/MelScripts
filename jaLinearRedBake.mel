@@ -1,4 +1,4 @@
-global proc jaLinearRedBake(string $sdInitial, string $sdEnd, string $sdnullend, string $sdnullini) {
+global proc jaLinearRedBake(string $sdInitial, string $sdEnd, string $constraints[]) {
     string $sdbListobj[] = `ls -sl`;
     string $ExpressionNode[] = `ls -type "expression" "*jaLinearRedistribute*"`;
     if (size($sdbListobj)){
@@ -6,9 +6,8 @@ global proc jaLinearRedBake(string $sdInitial, string $sdEnd, string $sdnullend,
             if (!($sdbObj == $sdInitial || $sdbObj == $sdEnd)){
                 if (size($ExpressionNode)){
                     delete $ExpressionNode;
-                    if($sdnullend!= " "){
-                        delete $sdnullend;
-                        delete $sdnullini;
+                    if(size($constraints)){
+                        delete $constraints;
                     }                    
                  print ("linear redistribute have been baked, suker \n");
                  } //delete expression
