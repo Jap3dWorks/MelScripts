@@ -1,0 +1,10 @@
+proc jaUndoInstall(){    
+    if (`objExists jaUndoSN`){
+        warning "jaUndoSN exists yet";
+        }
+    else {
+     scriptNode  -beforeScript  "int $jaUndoJ = `scriptJob -kws -pro -e \"Undo\"  \"jaUndo()\"`; //scriptJob -kill $jaUndoJ -force;" -n jaUndoSN;   
+     setAttr "jaUndoSN.scriptType" 1; setAttr jaUndoSN.scriptType 1;
+        }    
+    }
+jaUndoInstall();

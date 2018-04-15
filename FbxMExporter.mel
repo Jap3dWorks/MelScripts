@@ -1,0 +1,38 @@
+// hi, you must to add the "exp" atribute to the parent of objects you wish export
+
+proc JAMultExp(){
+     
+    string $MEPath = ""; //File Path here, be carefull with de / direction
+     
+    string $MEpathCheck[];
+    int $MEPatCheckint =`tokenize $MEPath "/" $MEpathCheck`;
+    if ($MEPatCheckint <= 1 ){
+        warning ("wait! Have you inserted the path? shucker. Fraaan remember de path");
+    }
+    else{
+        string $MEScneNulls[]=`ls -type transform`;
+        string $MExportableObj[];
+        int $MEEBi = 0;
+        for($MEobj in $MEScneNulls){
+             if (`attributeExists "exp" $MEobj`){
+                $MExportableObj[$MEEBi] = $MEobj;
+                $MEEBi++;
+                }
+            } //end for
+            
+        if ( size ($MExportableObj) <= 0 ){
+            warning ("ejem, no objects with the \"exp\" attribute have been found, ¬_¬ shucker. Fraan remember de attribute");
+            }
+        else {
+            for ($MEobjb in $MExportableObj){ 
+                string $MEexportFile = $MEPath + ("/") + $MEobjb;
+                select -r $MEobjb; select -hierarchy;
+                file -force -options "groups=1;ptgroups=1;materials=1;smoothing=1;normals=1" -typ "FBX export" -pr -es $MEexportFile;
+                select -cl;
+                }//end for
+            
+        } //end else    
+        clear $MEScneNulls; clear $MEpathCheck; clear $MExportableObj;
+    }//end else
+}//end proc
+JAMultExp();

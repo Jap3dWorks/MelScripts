@@ -1,0 +1,57 @@
+global proc JAcombineTool(){
+    string $CTselection[] = `ls -sl`;
+    int $CTselSize;
+    $CTselSize = size ($CTselection);
+    
+    if ($CTselSize <= 1){
+        print "select at least two objects";
+    }
+    else {
+        //freeze all scales
+        for ($CTselS in $CTselection){
+            string $cpParent[] = `listRelatives -p $CTselS`;
+            string $cpParV[] = `stringArrayRemove $CTselection $cpParent`;
+            //print $cpParent[0];
+            string $cpChildren[] =`ls -dag -type transform  $CTselS`;
+            string $cpChilwrn[]; $cpChilwrn[0] = $CTselS;
+            string $cpVChild [] = `stringArrayRemove $cpChilwrn $cpChildren`;
+            string $cpVChildB[] = `stringArrayRemove $CTselection $cpVChild`;
+            if (size ($cpVChildB) > 0){
+                if(size ($cpParV) >0){
+                     parent $cpVChildB $cpParent[0];
+                }
+                else{
+                     parent -w $cpVChildB;
+                }           
+            }
+            clear $cpChildren; clear $cpChilwrn; clear $cpVChild; clear $cpParent;
+            makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 -pn 1 $CTselS;                        
+        }
+        float $CTrot[] = `xform -q -ws -ro $CTselection[(($CTselSize) - 1)]`;
+        float $CTtrans[] = `xform -q -ws -t $CTselection[(($CTselSize) - 1)]`;
+        
+        string $CTgroup = `group $CTselection[(($CTselSize) - 1)]`;
+        xform -ztp -ws -ro $CTrot[0] $CTrot[1] $CTrot[2] $CTgroup;
+        xform -ztp -ws -t $CTtrans[0] $CTtrans[1] $CTtrans[2] $CTgroup;
+        xform -eu -ro 0 0 0  $CTselection[(($CTselSize) - 1)];
+        xform -os -t 0 0 0  $CTselection[(($CTselSize) - 1)];
+        
+        
+        string $CTFObj[] = `polyUnite -ch 1 -mergeUVSets 1 -cp -n $CTselection[(($CTselSize) - 1)] $CTselection`;
+        
+        //recolocate pivots and transforms
+        string $ctLN[] = `parent $CTFObj[0] $CTgroup`;
+        channelBoxCommand -freezeAll;
+        print $ctLN[0];
+        xform -ztp $ctLN[0];
+        DeleteHistory;
+        ungroup $CTgroup;
+        
+        //delete unused nodes
+        for ($pvI = 0; $pvI == ($CTselSize -2); $pvI++){
+            if (`objExists $CTselection[$pvI]`){
+                delete $CTselection[$pvI];
+            }
+        }
+    }
+}

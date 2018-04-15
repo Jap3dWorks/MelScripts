@@ -1,0 +1,84 @@
+global proc JAExtractFacesTool(){
+    string $efiniSelection[] = `ls -sl -an`;
+    string $efFaceSelection[]; //Save Faces
+    int $efi = 0; 
+    string $efObjectsSelection[]; // objects with face for duplicate later
+    string $efObjectsOnlySel[]; //Objects name only
+    int $efOO = 0;
+    string $efDupObj[]; //duplicatedObjects
+    int $efDupi = 0;
+    string $efDupFaces[]; //duplicated faces
+    int $efDupFI = 0;
+    string $efObndex[]; //index indicate n of object in array
+    int $efObjIndI = 0;
+    
+    for ($efiSel in $efiniSelection){ //Check selection for validate
+        string $eftypeSel[];
+        $efNumTokens = `tokenize $efiSel ".[]" $eftypeSel`;
+              
+        if ($eftypeSel[1] == "f"){         
+            //save all valid faces here
+            $efFaceSelection[$efi] = $efiSel;
+            $efi = $efi+1;           
+        }     
+        else {            
+            warning (($efiSel) + " " + "Cuidao que no es una cara loco" + "\n");          
+        }      
+    }
+       
+    for ($effSel in $efFaceSelection){
+        string $eftypeSel[];
+        $efNumTokens = `tokenize $effSel ".[]" $eftypeSel`; //tokenize each object
+        
+        int $ObjCheckerA = 0; //for check if obj exist in $efObjectsOnlySel
+        
+        for ($efObjI in $efObjectsOnlySel){
+            if ($eftypeSel[0] != $efObjI){
+                $ObjCheckerA = $ObjCheckerA + 1;
+            }
+            else {
+                break;
+                //nothing here 
+            }            
+        }
+        $efObndex[$efObjIndI] = $ObjCheckerA;
+         print ($efObndex[$efObjIndI] + "\n");
+         $efObjIndI = $efObjIndI +1; 
+        // final check if obj is saved yet
+        int $efOOSel = size ($efObjectsOnlySel);
+        if ($ObjCheckerA == $efOOSel){
+            $efObjectsOnlySel[$efOO] = $eftypeSel[0];
+            $efOO = $efOO + 1;
+        }
+        else {
+            // no res
+        }      
+        
+    } //end for    
+    //Duplicate object
+    for ($efDuOO in $efObjectsOnlySel){
+        string $efDupObjStr[];
+        $efDupObjStr = `duplicate -rr $efDuOO`; //duplicatedObjects
+        $efDupObj[$efDupi] =  $efDupObjStr[0];
+        $efDupi = $efDupi +1;
+    }
+    
+   //Save DupFaces
+    for ($efFaSelV in $efFaceSelection){
+        string $efFaSelTkns[];
+        $efFaSelVNumToken = `tokenize $efFaSelV ".[]" $efFaSelTkns`;
+        int $efObndexIne = ((int)$efObndex[$efDupFI]);
+        $efDupFaces[$efDupFI] = $efDupObj[$efObndexIne] + ".f[" + $efFaSelTkns[2] + "]";
+        $efDupFI = $efDupFI + 1;
+        } //enefor
+    select -cl;
+    delete $efFaceSelection;
+    select -cl;
+    selectMode -object;
+    select  $efDupObj;
+    selectMode -co;                   
+    select  $efDupFaces;
+    InvertSelection;
+    doDelete;
+    SelectAll;    
+}

@@ -1,0 +1,32 @@
+global proc string jaKPref(){
+    string $kpPref = " cagar desde un puente/ tener sida los lunes/ trabajar en navidad/ que te folle un burro" +
+    "/ que arkaitz se tire un pedo en tu cara/ que un coche te atropelle/ sacarte un moco delante de una tía buena" +
+    "/";
+    string $kpArray[];
+    int $kpTokens =`tokenize $kpPref "/" $kpArray`;
+    int $kpInd = 0;
+    string $kprefFinal;
+    while ($kpInd < 2){
+        if(! $kpInd){
+            int $kpRand = `rand 0 $kpTokens`;
+            string $kpdelete[];
+            $kpdelete[0] = $kpArray[$kpRand];
+            $kprefFinal = "Qué prefieres," + $kpArray[$kpRand];            
+            $kpInd ++;
+            string $kpNewArray[] = stringArrayRemoveExact($kpdelete, $kpArray);
+            $kpArray = $kpNewArray;
+            }
+        if($kpInd){
+            int $kpSArray = size($kpArray);
+            int $kpRand = `rand 0 $kpSArray`;
+            string $kpdelete[];
+            $kpdelete[0] = $kpArray[$kpRand];
+            $kprefFinal = $kprefFinal + " o" + $kpArray[$kpRand];
+            $kpInd ++;
+            string $kpNewArray[] = stringArrayRemoveExact($kpdelete, $kpArray);
+            $kpArray = $kpNewArray;
+        }
+    }   
+  //print $kprefFinal;
+  return $kprefFinal;
+}

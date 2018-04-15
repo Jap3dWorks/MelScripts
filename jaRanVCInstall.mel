@@ -1,0 +1,30 @@
+proc jaRanVCInstall(){
+    string $DTag = "jaRanVC"; //tag of the shelf button
+    string $icLab = "jaRVC"; //icon label
+    string $ann = "Randomize colors of vertex"; //annotation
+    string $shelf = "vlShelf"; //parent shelf
+    string $icon = "render_rampShader.png"; //icon
+    string $command = "jaRnVC(<<0, .1, .1>> , 0);" ;//command
+    
+    if (`layout -q -ex  $shelf`){
+    //if(!(`shelfButton -q -ex -dtg "jaRanVC"`)){
+        string $vlshelfButtons[] = `shelfLayout -q -ca $shelf`;
+        int $vlExInd=0;
+        for ( $vlbutton in $vlshelfButtons ){
+             if((`shelfButton -q -docTag $vlbutton`) == ($DTag)){
+                 $vlExInd++;
+                 }
+             }//end for
+         if(!($vlExInd++)){
+             shelfButton -ann $ann  -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;
+             }
+         else {
+             warning ($icLab + " button is in your vlShelf yet. dick head.");
+         }
+        }
+    else{
+        addNewShelfTab  ($shelf);        
+        shelfButton -ann $ann -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;             
+        } //end else        
+    }
+jaRanVCInstall()

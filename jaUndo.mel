@@ -1,0 +1,39 @@
+global proc jaUndo(){
+    int $rndIA = `rand 1 11`;
+    int $rndIB = `rand 1 15`;
+    string $slur;
+    string $joke;
+    
+    //list of slurs
+    switch ($rndIA){
+        case 1: $slur = "maybe are you a 3dmax user?"; break;      
+        case 2: $slur = "Handless."; break;
+        case 3: $slur = "you are pensioner, isn't it?"; break;
+        case 4: $slur = "sew floors."; break;     
+        case 5: $slur = "Relax, I'm not going to tell Jesus ¬_¬."; break;            
+        case 6: $slur = "nobody loves you."; break;       
+        case 7: $slur = "commit suicide."; break;        
+        case 8: $slur = "Take a break and think about what you've done, suker."; break;           
+        case 9: $slur = "dirty fapper monkey"; break;        
+        case 10: $slur = "really? you were the best sperm?"; break;         
+        default: $slur = "son of a bitch"; break;                           
+    } //end switch
+    
+    switch ($rndIB){
+        case 1: $joke = "Qué trabajo deja más dinero? el de jardinero."; break;        
+        case 2: $joke = "Mi hermana toca el violín y mi padre la viola"; break;        
+        case 3: $joke = "Escoba voladora en japonés? Simekaigo Memato"; break;        
+        case 4: $joke = "Doctor me sangra el coño ¿Que puedo hacer? -Morcillas con arroz"; break;       
+        case 5: $joke = "Qué tiene dos patas y sangra mucho. Medio perro"; break;        
+        case 6: $joke = "Durante un tiempo fui un hombre atrapado en un cuerpo de mujer. Después nací."; break;        
+        case 7: $joke = "Nivel de inglés Alto -Traduzca juguete -Toy -Una frase -Toy triste"; break;        
+        case 8: $joke = "A buen culo, buen peo"; break;        
+        case 9: $joke = "Cómo se despiden los químicos? - Ácido un placer."; break;        
+        case 10: $joke = "Taxi!!! -Señora!!!"; break;
+        case 11: $joke = `jaKPref`; break;  case 12: $joke = `jaKPref`; break;  case 13: $joke = `jaKPref`; break;        
+        default: $joke = "Divorcio en alemán? Chao Chochín... Agárrame el pepino"; break;         
+    }
+    
+    //print ($rndIA + " " + $rndIB);
+    print ($slur + " -> " + $joke + "\n");
+}

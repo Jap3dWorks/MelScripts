@@ -1,0 +1,65 @@
+proc vertexLocatorCons (){
+    string $verSel[] = `ls -sl`;
+    int $size = `size ($verSel)`;
+    
+    int $vlcI=0;
+    string $locators[];
+    if ($size == 0) {
+        print "Select at least one vertex";
+    }
+    else {
+        int $VertCount = 0;
+        string $verSelReorder[];//here final vertex reorder
+        for ($vSt in $verSel){
+            string $pTokens[];
+            int $chechInd = `tokenize $vSt ":" $pTokens`;
+            if($chechInd == 2){
+                string $tokenString[];
+                tokenize $vSt "[:]" $tokenString;
+                int $VerNumbers = ((int)$tokenString[2] - (int)$tokenString[1]);
+                for ($vrI=0; $vrI<$VerNumbers; $vrI++){
+                    int $vSTI = (int)$tokenString[1] + $vrI;
+                    $verSelReorder[$VertCount] = $tokenString[0] + "[" + $vSTI + "]";
+                    $VertCount = $VertCount + 1;
+                    }  
+                    }
+                    else  
+                    {
+                      $verSelReorder[$VertCount] = $vSt;
+                      $VertCount = $VertCount + 1;
+                    }
+                
+            }
+        
+        
+        
+        
+        for ($vS in $verSelReorder){
+            
+            string $object[];
+            int $numtokens = `tokenize $vS ".[]" $object`; 
+            float $vPos[] = `xform -q -ws -t $vS`;
+            string $loc[] = `spaceLocator -p 0 0 0`;
+            $locators[$vlcI] = $loc[0];
+            $vlcI = $vlcI + 1;
+            string $uvVertex[] = `polyListComponentConversion -tuv $vS`;
+            select -r $uvVertex[0];  
+            float $uv[] = `polyEditUV -query`;
+            select -r $vS;
+            select -tgl $loc[0];
+            doCreatePointOnPolyConstraintArgList 2 { "0" ,"0" ,"0" ,"1" ,"" ,"1" ,"0" ,"0" ,"0" ,"0" };
+            {string $constraint[]=`pointOnPolyConstraint -offset 0 0 0 -weight 1`;
+            setAttr ($constraint[0]+ "." + $object[0] + "U0") $uv[0];
+            setAttr ($constraint[0]+ "." + $object[0] + "V0") $uv[1];};
+        }
+        select -cl;
+        string $groupL = `group -em -n "pointOnPolyConstraint"`;
+       for ($locat in $locators){
+           parent $locat $groupL;
+           }
+   print $size;
+   print $verSel;
+   print $verSelReorder;
+   }  
+}
+vertexLocatorCons ();

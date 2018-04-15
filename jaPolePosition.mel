@@ -1,0 +1,53 @@
+global proc string[] jaPolePosition(string $ppJoints[], float $ppmagnitude) {
+    string $ppSelection[];
+    if (size ($ppJoints) == 1 && $ppJoints[0] == " "){
+        $ppSelection =`ls -os -type "joint"`;
+    }
+    else {
+        $ppSelection = $ppJoints; 
+    }
+    string $ppVectorCLocator[];
+    if (size ($ppSelection) == 3){     
+        vector $ppPosA = `xform -q -ws -t $ppSelection [0]`;
+        vector $ppPosB = `xform -q -ws -t $ppSelection [1]`;
+        vector $ppPosC = `xform -q -ws -t $ppSelection [2]`;
+        
+        vector $a = $ppPosB - $ppPosA;    
+        $a = unit($a);
+        
+        vector $b = $ppPosB - $ppPosC;
+        $b = unit($b);
+        
+        vector $c = $a + $b;
+        $c = unit($c);
+        //float $ppmagnitude = 5;
+        $ppVectorCLocator = `spaceLocator`; 
+        
+        //cross product a and b vectors
+        vector $ppVAxisZ = cross ($a, $b);
+        $ppVAxisZ = unit ($ppVAxisZ);
+        
+        //cros AxisZ and C
+        vector $ppVAxisY = cross ($ppVAxisZ, $c);
+        $ppVAxisY = unit ($ppVAxisY);
+        
+        
+        xform -ws -m ($c.x) ($c.y) ($c.z) (0.0) 
+                     ($ppVAxisY.x) ($ppVAxisY.y) ($ppVAxisY.z) (0.0) 
+                     ($ppVAxisZ.x) ($ppVAxisZ.y) ($ppVAxisZ.z) (0.0) 
+                     ($c.x * $ppmagnitude) ($c.y * $ppmagnitude) ($c.z * $ppmagnitude) (1.0) $ppVectorCLocator[0];
+                 
+        // reposition of the locator vectorC
+        string $ppMoveVectorC = `group -w -em`;
+        parent $ppVectorCLocator[0] $ppMoveVectorC;
+        xform -ws -t ($ppPosB.x) ($ppPosB.y) ($ppPosB.z) $ppMoveVectorC;
+        ungroup $ppMoveVectorC; 
+    }
+    else {
+        print "please select three joints, suker";
+        
+    } 
+   return $ppVectorCLocator;
+}
+jaPolePosition({" "}, 10);
+//jaPolePosition({"joint1", "joint2", "joint3"});

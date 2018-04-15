@@ -1,0 +1,26 @@
+global proc jaVertexConect(){
+    string $vcSelect[] = `ls -os -fl -type float3`;
+    print ($vcSelect);
+    string $vcValSel[];
+    int $vcin = 0;
+    for ($vcObj in $vcSelect){
+        string $vctokenize[];
+        int $vcnumTokens = `tokenize $vcObj ".[]" $vctokenize`;
+        if ($vctokenize[1] == "vtx"){
+            $vcValSel[$vcin] = $vcObj;
+            $vcin++;
+        }
+    } //end for
+    int $vcNEl = size($vcValSel);
+    if ($vcNEl < 2){
+        print "select at least two vtx, suker";
+    }
+    else{
+        for ($vcinF = 0; $vcinF < (($vcNEl)-1); $vcinF++){
+           polyConnectComponents -ch 1 -insertWithEdgeFlow 0 -adjustEdgeFlow 1 $vcValSel[$vcinF] $vcValSel[($vcNEl)-1];
+        }// end for reposition
+        string $vctokenize[];
+        int $vcnumTokens = `tokenize $vcValSel[($vcNEl)-1] ".[]" $vctokenize`;
+        delete -ch $vctokenize[0];
+    }
+}

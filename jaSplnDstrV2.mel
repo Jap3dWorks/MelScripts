@@ -1,0 +1,130 @@
+global proc jaSplnDstrV2(float $sdDistanceD, int $instances, vector $jaRTra, vector $jaRRo, int $jaRScMo, vector $jaRSca, int $sdNormalOri){
+    string $sdSplineShapes[] = `ls -sl -dag -type nurbsCurve -type bezierCurve`;
+    string $sdPolyShapesRe[] = `ls -sl -dag -type mesh -type "joint"`; //mesh selected
+    string $sdLiveObject[] = `ls -live`;
+    string $sdSceneGroups[] = `ls -et transform "*G*"`;
+    global int $sdSJLaunch;
+    
+    // delete old non accepted groups
+    for ($sdOG in  $sdSceneGroups){
+         if (`attributeExists "jasdOG" $sdOG`){
+                delete $sdOG;
+                }
+            } //end for
+    
+    for ($sdObj in $sdSplineShapes){ //for spline
+        float $sdLengt = `arclen $sdObj`; 
+        float $sdincrement = $sdDistanceD / $sdLengt;
+        float $sdincCounter =0;
+        string $sdPplaneG[];
+        int $sdiPG = 0;
+        while ( $sdincCounter <= 1){
+             string $sdPlane = `group -em -w`;
+             addAttr -ln "jasdPG"  -dt "string" -h 1 -k 0  $sdPlane;
+             string $sdMPath = `pathAnimation -fractionMode true -follow true -followAxis x -upAxis y -worldUpType "vector" 
+             -worldUpVector 0 1 0 -inverseUp false -inverseFront false -bank false $sdObj $sdPlane`;
+             $sdPplaneG[$sdiPG] = $sdPlane;
+             setAttr ($sdMPath + ".uValue") $sdincCounter;
+             $sdiPG++;
+             $sdincCounter = $sdincCounter + $sdincrement; 
+             string $locator;
+             int $sdIsJoint = 0; //save if is a joint
+             //create objects
+             if (size($sdPolyShapesRe) < 1){
+                  string $locatorS[] = `spaceLocator`;
+                  $locator = $locatorS[0];
+                  }
+             if (size($sdPolyShapesRe) == 1){ //one object selected
+                 if($instances){
+                     string $sdTypeJoint[]=`ls -showType $sdPolyShapesRe[0]`;
+                     if ($sdTypeJoint[1] == "joint"){
+                         string $locatorS[] = `duplicate -rc -rr $sdPolyShapesRe[0]`;
+                         $locator = $locatorS[0];
+                         $sdIsJoint = 1;
+                         }
+                     else{
+                         string $locatorS[] = `duplicate -rr -ilf $sdPolyShapesRe[0]`;
+                         $locator = $locatorS[0];
+                         }
+                     
+                     }
+                 else{
+                     string $locatorS[] = `duplicate -rr $sdPolyShapesRe[0]`;
+                     $locator = $locatorS[0];
+                     }
+                  }
+             if (size($sdPolyShapesRe) > 1){ //more than one
+                 int $jaValRand = `rand 0 (size($sdPolyShapesRe))`;
+                 if($instances){
+                     string $sdTypeJoint[]=`ls -showType $sdPolyShapesRe[$jaValRand]`;
+                     if ($sdTypeJoint[1] == "joint" ){
+                         string $locatorS[] = `duplicate -rc -rr $sdPolyShapesRe[$jaValRand]`;
+                         $locator = $locatorS[0];
+                         $sdIsJoint = 1;
+                         }
+                     else{
+                             string $locatorS[] = `duplicate -rr -ilf $sdPolyShapesRe[$jaValRand]`;
+                             $locator = $locatorS[0];
+                         }
+                     
+                     }
+                 else {
+                     string $locatorS[] = `duplicate -rr $sdPolyShapesRe[$jaValRand]`;
+                     $locator = $locatorS[0];
+                     }
+                 }
+              
+              parent $locator $sdPlane;
+              xform -eu -t 0 0 0 -ro 0 0 0 -s 1 1 1  $locator;
+              
+              if ( $sdIsJoint ) {
+                  setAttr ($locator + ".jointOrientX") 0;
+                  setAttr ($locator + ".jointOrientY") 0;
+                  setAttr ($locator + ".jointOrientZ") 0;
+              }            
+              //Constraint Creation           
+              if (size($sdLiveObject)){ //on live surface
+                  geometryConstraint $sdLiveObject $locator;
+                  if($sdNormalOri){ //normal orientation
+                       normalConstraint -weight 1 -aimVector 0 1 0 -upVector 0 1 0 -worldUpType "vector" -worldUpVector 0 1 0 $sdLiveObject $locator;
+                              }
+                              xform -eu -t 0 0 0 $locator; 
+                          }
+              //Random transformations  
+              if(($jaRTra.x) || ($jaRTra.y) || ($jaRTra.z)){                  
+                  xform -r -t (`rand (-$jaRTra.x) ($jaRTra.x)`) (`rand (-$jaRTra.y) ($jaRTra.y)`) (`rand (-$jaRTra.z) ($jaRTra.z)`) $locator;
+                      }
+              
+              if(($jaRSca.x) || ($jaRSca.y) || ($jaRSca.z)){                  
+                  if($jaRScMo == 0){
+                      xform -r -s (1+(`rand (-$jaRSca.x) ($jaRSca.x)`)) (1+(`rand (-$jaRSca.y) ($jaRSca.y)`)) (1+(`rand (-$jaRSca.z) ($jaRSca.z)`)) $locator;
+                          }
+                  if($jaRScMo == 1){
+                      float $jaRScT1 = `rand (-$jaRSca.x) ($jaRSca.x)`;
+                      xform -r -s (1+($jaRScT1)) (1+($jaRScT1)) (1+($jaRScT1)) $locator;
+                          }
+                  if($jaRScMo == 2){
+                      float $jaRScT1 = `rand (-$jaRSca.x) ($jaRSca.x)`;
+                      xform -r -s (1+($jaRScT1)) (1+(`rand (-$jaRSca.y) ($jaRSca.y)`)) (1+($jaRScT1)) $locator;
+                          }                  
+                      } //end if
+              
+              if(($jaRRo.x) || ($jaRRo.y) || ($jaRRo.z)){                  
+              xform -r -ro (`rand (-$jaRRo.x) ($jaRRo.x)`) (`rand (-$jaRRo.y) ($jaRRo.y)`) (`rand (-$jaRRo.z) ($jaRRo.z)`) $locator;
+                      }
+                          
+             } //end while
+          // arrange elements                         
+          string $sdLGroup = `group -em -n ($sdObj  + "G")`;//create Group G
+          addAttr -ln "jasdOG"  -dt "string" -h 1 -k 0  $sdLGroup;
+          parent $sdPplaneG $sdLGroup; 
+                        
+      }//end for spline
+      if (($sdSJLaunch)){
+          scriptJob -f -kill $sdSJLaunch;
+          //print "job deleted \n";
+      }
+    $sdSJLaunch = `scriptJob -kws -pro -e "SelectionChanged" "jaSDV2Bake()"`;
+    select -r $sdSplineShapes $sdPolyShapesRe;
+}  
+//jaSplnDstrV2(4, 1, <<0, 0, 0>>, <<0, 0, 0>>, 2, <<0, 0, 0>>,1);

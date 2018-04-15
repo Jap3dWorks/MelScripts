@@ -1,0 +1,21 @@
+global proc jaSDV2Bake(){
+    string $sdbListobj[] = `ls -sl -type transform "*G*"`;
+    if (size($sdbListobj)){
+        for ($sdbObj in  $sdbListobj){            
+            if (`attributeExists "jasdOG" $sdbObj`){
+                string $sdbConstraints[] = `ls  -dag -type "geometryConstraint" -type "normalConstraint" $sdbObj`;
+                if (size($sdbConstraints)){delete $sdbConstraints;} //delete constraints
+                string $sdbGroups[] = `ls -dag -type transform $sdbObj`;
+                for ($sdbObjG in $sdbGroups){
+                    if(`attributeExists "jasdPG" $sdbObjG`){
+                        //print ($sdbObjG + "\n");
+                        ungroup $sdbObjG;
+                      
+                    }
+                }
+                print ($sdbObj + " have been baked \n");
+                deleteAttr -at "jasdOG" $sdbObj;
+            }
+        }
+    }
+}

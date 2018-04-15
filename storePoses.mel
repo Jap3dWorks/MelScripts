@@ -1,0 +1,36 @@
+proc storePoses() {
+string $SPselected[] = `ls -sl`;
+if (size ($SPselected) == 0) {
+    print ("select at less one object");
+    }
+else{
+    string $SPcomand;
+    string $SPdata []; 
+    int $SPi = 0;
+    for ($SPsell in $SPselected){
+        float $SPposs[] = `xform -q -os -t $SPsell`;
+        float $SProt[] = `xform -q -os -ro $SPsell`;
+        float $SPsca[] = `xform -q -r -s $SPsell`;
+        string $SPtranss = ("xform" + " " + "-os" + " " + "-t" + " " + $SPposs[0] + " "+ $SPposs[1] + " " + $SPposs[2] +" "+ "-ro" + " " + $SProt[0] + " "+ $SProt[1] + " " + $SProt[2]+" " + "-s" + " " + $SPsca[0] + " "+ $SPsca[1] + " " + $SPsca[2] + " " + $SPsell+ ";" + "\n"); 
+        $SPdata [$SPi] = $SPtranss; 
+        $SPi = $SPi + 1;
+         }
+    for ($SPdat in $SPdata){
+            $SPcomand = $SPcomand + $SPdat;
+        }
+       // print $comand;
+       //Check IF shelf Tab Exist if not, create one
+        int $SPInstall_shelfExists = `layout -q -ex "sPoses"`;
+        if ($SPInstall_shelfExists == 0){
+           addNewShelfTab ("sPoses"); 
+        } 
+        
+        string $SPposeB = `promptDialog -t "Pose" -message "name of pose" -button "save it"`;
+        
+        if ($SPposeB == "save it"){
+            string $SPposeName = `promptDialog -q -t`;
+            shelfButton -ann $SPposeName  -iol $SPposeName -i1 "ambientlight" -c $SPcomand -p "sPoses";
+        }        
+    }
+}
+storePoses();

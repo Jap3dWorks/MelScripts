@@ -1,0 +1,281 @@
+//ui  
+if (`window -ex SetDKCWindow`){
+        deleteUI SetDKCWindow;
+    }
+window -t "SetDrivenKeyConector" SetDKCWindow;
+rowColumnLayout -numberOfColumns 3;
+        text -label "Atribute";  text -label "Driver inc value"; text -label "Driven inc value";
+        separator; separator; separator;
+        //transformation
+        global string $SDCCheckBTX;
+        $SDCCheckBTX = `checkBox -l "transformation X"`;
+        global string $SDCFFDriverTX;
+        $SDCFFDriverTX  = `floatField -value 1`;
+        global string $SDCFFDrivenTX;
+        $SDCFFDrivenTX  = `floatField -value 1`;
+        global string $SDCCheckBTY;
+        $SDCCheckBTY = `checkBox -l "transformation Y"`;
+        global string $SDCFFDriverTY;
+        $SDCFFDriverTY = `floatField -value 1`;
+        global string $SDCFFDrivenTY;
+        $SDCFFDrivenTY = `floatField -value 1`;
+        global string $SDCCheckBTZ;
+        $SDCCheckBTZ = `checkBox -l "transformation Z"`;
+        global string $SDCFFDriverTZ;
+        $SDCFFDriverTZ = `floatField -value 1`;
+        global string $SDCFFDrivenTZ;
+        $SDCFFDrivenTZ =  `floatField -value 1`;
+        //rotation
+        global string $SDCCheckBRX;
+        $SDCCheckBRX = `checkBox -l "rotation X"`;
+        global string $SDCFFDriverRX;
+        $SDCFFDriverRX = `floatField -value 1`;
+        global string $SDCFFDrivenRX;
+        $SDCFFDrivenRX = `floatField -value 1`;
+        global string $SDCCheckBRY;
+        $SDCCheckBRY = `checkBox -l "rotation Y"`;
+        global string $SDCFFDriverRY;
+        $SDCFFDriverRY = `floatField -value 1`;
+        global string $SDCFFDrivenRY;
+        $SDCFFDrivenRY = `floatField -value 1`;
+        global string $SDCCheckBRZ;
+        $SDCCheckBRZ = `checkBox -l "rotation Z"`;
+        global string $SDCFFDriverRZ;
+        $SDCFFDriverRZ = `floatField -value 1`;
+        global string $SDCFFDrivenRZ;
+        $SDCFFDrivenRZ = `floatField -value 1`;
+        //scale
+        global string $SDCCheckBSX;
+        $SDCCheckBSX = `checkBox -l "scale X"`;
+        global string $SDCFFDriverSX;
+        $SDCFFDriverSX = `floatField -value 1`;
+        global string $SDCFFDrivenSX;
+        $SDCFFDrivenSX = `floatField -value 1`;
+        global string $SDCCheckBSY;
+        $SDCCheckBSY = `checkBox -l "scale Y"`;
+        global string $SDCFFDriverSY;
+        $SDCFFDriverSY = `floatField -value 1`;
+        global string $SDCFFDrivenSY;
+        $SDCFFDrivenSY = `floatField -value 1`;
+        global string $SDCCheckBSZ;
+        $SDCCheckBSZ = `checkBox -l "scale Z"`;
+        global string $SDCFFDriverSZ;
+        $SDCFFDriverSZ = `floatField -value 1`;
+        global string $SDCFFDrivenSZ;
+        $SDCFFDrivenSZ = `floatField -value 1`;
+    separator; separator; separator;
+    button -l "Set driven key!" -c "setDKConector()";
+showWindow;
+ //checkboxValues
+
+proc setDKConector(){
+    
+    string $SDCSelection []= `ls -sl`;
+    int $SDCSelSize = `size ($SDCSelection)`;
+    
+//Declare Global Variables
+    global string $SDCCheckBTX; global string $SDCFFDriverTX; global string $SDCFFDrivenTX; global string $SDCCheckBTY;
+    global string $SDCFFDriverTY; global string $SDCFFDrivenTY; global string $SDCCheckBTZ; global string $SDCFFDriverTZ;
+    global string $SDCFFDrivenTZ;
+    
+    global string $SDCCheckBRX; global string $SDCFFDriverRX; global string $SDCFFDrivenRX;
+    global string $SDCCheckBRY; global string $SDCFFDriverRY; global string $SDCFFDrivenRY;
+    global string $SDCCheckBRZ; global string $SDCFFDriverRZ; global string $SDCFFDrivenRZ;
+
+    global string $SDCCheckBSX; global string $SDCFFDriverSX; global string $SDCFFDrivenSX;
+    global string $SDCCheckBSY; global string $SDCFFDriverSY; global string $SDCFFDrivenSY;
+    global string $SDCCheckBSZ; global string $SDCFFDriverSZ; global string $SDCFFDrivenSZ;
+//checkbox value
+    string $SDCCBTXVal = `checkBox -query -value $SDCCheckBTX`;
+    string $SDCCBTYVal = `checkBox -query -value $SDCCheckBTY`;
+    string $SDCCBTZVal = `checkBox -query -value $SDCCheckBTZ`;
+    string $SDCCBRXVal = `checkBox -query -value $SDCCheckBRX`;
+    string $SDCCBRYVal = `checkBox -query -value $SDCCheckBRY`;
+    string $SDCCBRZVal = `checkBox -query -value $SDCCheckBRZ`;
+    string $SDCCBSXVal = `checkBox -query -value $SDCCheckBSX`;
+    string $SDCCBSYVal = `checkBox -query -value $SDCCheckBSY`;
+    string $SDCCBSZVal = `checkBox -query -value $SDCCheckBSZ`;
+//floatFieldValues
+    float $SDCFFrTXVal = `floatField -q -v $SDCFFDriverTX`;
+    float $SDCFFnTXVal = `floatField -q -v $SDCFFDrivenTX`;
+    float $SDCFFrTYVal = `floatField -q -v $SDCFFDriverTY`;
+    float $SDCFFnTYVal = `floatField -q -v $SDCFFDrivenTY`;
+    float $SDCFFrTZVal = `floatField -q -v $SDCFFDriverTZ`;
+    float $SDCFFnTZVal = `floatField -q -v $SDCFFDrivenTZ`;
+    
+    float $SDCFFrRXVal = `floatField -q -v $SDCFFDriverRX`;
+    float $SDCFFnRXVal = `floatField -q -v $SDCFFDrivenRX`;
+    float $SDCFFrRYVal = `floatField -q -v $SDCFFDriverRY`;
+    float $SDCFFnRYVal = `floatField -q -v $SDCFFDrivenRY`;
+    float $SDCFFrRZVal = `floatField -q -v $SDCFFDriverRZ`;
+    float $SDCFFnRZVal = `floatField -q -v $SDCFFDrivenRZ`;
+    
+    float $SDCFFrSXVal = `floatField -q -v $SDCFFDriverSX`;
+    float $SDCFFnSXVal = `floatField -q -v $SDCFFDrivenSX`;
+    float $SDCFFrSYVal = `floatField -q -v $SDCFFDriverSY`;
+    float $SDCFFnSYVal = `floatField -q -v $SDCFFDrivenSY`;
+    float $SDCFFrSZVal = `floatField -q -v $SDCFFDriverSZ`;
+    float $SDCFFnSZVal = `floatField -q -v $SDCFFDrivenSZ`;
+    
+    for ($SDCI = 0; $SDCI < $SDCSelSize; $SDCI = ($SDCI + 2)){
+        //query transformations 
+        float $driverT[] = `xform -q -eu -t $SDCSelection[($SDCI)]`;
+        float $drivenT[] = `xform -q -eu -t $SDCSelection[($SDCI + 1)]`;
+        float $driverR[] = `xform -q -eu -ro $SDCSelection[$SDCI]`;
+        float $drivenR[] = `xform -q -eu -ro $SDCSelection[($SDCI + 1)]`;
+        float $driverS[] = `xform -q -r -s $SDCSelection[$SDCI]`;
+        float $drivenS[] = `xform -q -r -s $SDCSelection[($SDCI + 1)]`;
+        //translate DK
+        if ($SDCCBTXVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateX") ($SDCSelection[($SDCI + 1)] + ".translateX");
+            xform -eu -t ($driverT[0] + $SDCFFrTXVal) $driverT[1] $driverT[2] $SDCSelection[$SDCI];
+            xform -eu -t ($drivenT[0] + $SDCFFnTXVal) $drivenT[1] $drivenT[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateX") ($SDCSelection[($SDCI + 1)] + ".translateX");
+            xform -eu -t $driverT[0] $driverT[1] $driverT[2] $SDCSelection[$SDCI];
+            //xform -eu -t $drivenT[0] $drivenT[1] $drivenT[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveTXPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateX") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveTXPI;
+            string $AnimCurveTXPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateX") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveTXPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateX")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateX")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateX")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateX")) ;
+           
+            
+        }
+        if ($SDCCBTYVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateY") ($SDCSelection[($SDCI + 1)] + ".translateY");
+            xform -eu -t $driverT[0] ($driverT[1] + $SDCFFrTYVal) $driverT[2] $SDCSelection[$SDCI];
+            xform -eu -t $drivenT[0] ($drivenT[1] + $SDCFFnTYVal) $drivenT[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateY") ($SDCSelection[($SDCI + 1)] + ".translateY");
+            xform -eu -t $driverT[0] $driverT[1] $driverT[2] $SDCSelection[$SDCI];
+            //xform -eu -t $drivenT[0] $drivenT[1] $drivenT[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveTYPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateY") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveTYPI;
+            string $AnimCurveTYPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateY") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveTYPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateY")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateY")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateY")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateY")) ;
+        }
+        if ($SDCCBTZVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateZ") ($SDCSelection[($SDCI + 1)] + ".translateZ");
+            xform -eu -t $driverT[0] $driverT[1]  ($driverT[2] + $SDCFFrTZVal) $SDCSelection[$SDCI];
+            xform -eu -t $drivenT[0] $drivenT[1]  ($drivenT[2] + $SDCFFnTZVal) $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".translateZ") ($SDCSelection[($SDCI + 1)] + ".translateZ");
+            xform -eu -t $driverT[0] $driverT[1] $driverT[2] $SDCSelection[$SDCI];
+            //xform -eu -t $drivenT[0] $drivenT[1] $drivenT[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveTZPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateZ") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveTZPI;
+            string $AnimCurveTZPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_translateZ") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveTZPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateZ")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateZ")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateZ")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_translateZ")) ;
+        }
+        //rotation
+        if ($SDCCBRXVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateX") ($SDCSelection[($SDCI + 1)] + ".rotateX");
+            xform -eu -ro ($driverR[0] + $SDCFFrRXVal) $driverR[1] $driverR[2] $SDCSelection[$SDCI];
+            xform -eu -ro ($drivenR[0] + $SDCFFnRXVal) $drivenR[1] $drivenR[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateX") ($SDCSelection[($SDCI + 1)] + ".rotateX");
+            xform -eu -ro $driverR[0] $driverR[1] $driverR[2] $SDCSelection[$SDCI];
+            //xform -eu -ro $drivenR[0] $drivenR[1] $drivenR[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveRXPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateX") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveRXPI;
+            string $AnimCurveRXPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateX") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveRXPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateX")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateX")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateX")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateX")) ;
+        }
+        if ($SDCCBRYVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateY") ($SDCSelection[($SDCI + 1)] + ".rotateY");
+            xform -eu -ro $driverR[0] ($driverR[1] + $SDCFFrRYVal) $driverR[2] $SDCSelection[$SDCI];
+            xform -eu -ro $drivenR[0] ($drivenR[1] + $SDCFFnRYVal) $drivenR[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateY") ($SDCSelection[($SDCI + 1)] + ".rotateY");
+            xform -eu -ro $driverR[0] $driverR[1] $driverR[2] $SDCSelection[$SDCI];
+            //xform -eu -ro $drivenR[0] $drivenR[1] $drivenR[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveRYPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateY") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveRYPI;
+            string $AnimCurveRYPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateY") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveRYPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateY")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateY")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateY")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateY")) ;
+        }
+        if ($SDCCBRZVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateZ") ($SDCSelection[($SDCI + 1)] + ".rotateZ");
+            xform -eu -ro $driverR[0] $driverR[1]  ($driverR[2] + $SDCFFrRZVal) $SDCSelection[$SDCI];
+            xform -eu -ro $drivenR[0] $drivenR[1]  ($drivenR[2] + $SDCFFnRZVal) $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".rotateZ") ($SDCSelection[($SDCI + 1)] + ".rotateZ");
+            xform -eu -ro $driverR[0] $driverR[1] $driverR[2] $SDCSelection[$SDCI];
+            //xform -eu -ro $drivenR[0] $drivenR[1] $drivenR[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveRZPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateZ") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveRZPI;
+            string $AnimCurveRZPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_rotateZ") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveRZPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateZ")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateZ")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateZ")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_rotateZ")) ;
+        }
+        //scale
+          if ($SDCCBSXVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleX") ($SDCSelection[($SDCI + 1)] + ".scaleX");
+            xform -s ($driverS[0] + $SDCFFrSXVal) $driverS[1] $driverS[2] $SDCSelection[$SDCI];
+            xform -s ($drivenS[0] + $SDCFFnSXVal) $drivenS[1] $drivenS[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleX") ($SDCSelection[($SDCI + 1)] + ".scaleX");
+            xform -s $driverS[0] $driverS[1] $driverS[2] $SDCSelection[$SDCI];
+            //xform -s $drivenS[0] $drivenS[1] $drivenS[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveSXPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleX") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveSXPI;
+            string $AnimCurveSXPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleX") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveSXPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleX")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleX")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleX")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleX")) ;
+        }
+        if ($SDCCBSYVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleY") ($SDCSelection[($SDCI + 1)] + ".scaleY");
+            xform -s $driverS[0] ($driverS[1] + $SDCFFrSYVal) $driverS[2] $SDCSelection[$SDCI];
+            xform -s $drivenS[0] ($drivenS[1] + $SDCFFnSYVal) $drivenS[2] $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleY") ($SDCSelection[($SDCI + 1)] + ".scaleY");
+            xform -s $driverS[0] $driverS[1] $driverS[2] $SDCSelection[$SDCI];
+            //xform -s $drivenS[0] $drivenS[1] $drivenS[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveSYPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleY") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveSYPI;
+            string $AnimCurveSYPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleY") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveSYPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleY")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleY")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleY")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleY")) ;
+        }
+        if ($SDCCBSZVal == (1)){
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleZ") ($SDCSelection[($SDCI + 1)] + ".scaleZ");
+            xform  -s $driverS[0] $driverS[1]  ($driverS[2] + $SDCFFrSZVal) $SDCSelection[$SDCI];
+            xform  -s $drivenS[0] $drivenS[1]  ($drivenS[2] + $SDCFFnSZVal) $SDCSelection[($SDCI + 1)];
+            setDrivenKeyframe -currentDriver ($SDCSelection[$SDCI] + ".scaleZ") ($SDCSelection[($SDCI + 1)] + ".scaleZ");
+            xform  -s $driverS[0] $driverS[1] $driverS[2] $SDCSelection[$SDCI];
+            //xform -s $drivenS[0] $drivenS[1] $drivenS[2] $SDCSelection[($SDCI + 1)];
+            string $AnimCurveSZPI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleZ") + (".postInfinity\"") + (" 4;"));
+            eval $AnimCurveSZPI;
+            string $AnimCurveSZPrI = (("setAttr ") + ("\"") + ($SDCSelection[($SDCI + 1)]) + ("_scaleZ") + (".preInfinity\"") + (" 4;"));
+            eval $AnimCurveSZPrI;
+            keyTangent -index 0 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleZ")) ; 
+            keyTangent -index 0 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleZ")) ; 
+            keyTangent -index 1 -inTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleZ")) ;  
+            keyTangent -index 1 -outTangentType linear ($SDCSelection[($SDCI + 1)] + ("_scaleZ")) ;
+        }
+        
+    }    
+   
+}
+   

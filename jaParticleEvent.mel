@@ -1,0 +1,11 @@
+global proc jaParticleEvent (string $particle, int $Id, string $geoObj) {
+    if ( ( $Id == 120) && ($geoObj == “ bucket1”) ) {
+    setAttr ($geoObj + “.collisionCheck”) 1;
+    }
+    if ( ( $Id == 120) && ($geoObj == “ bucket2”) ) {
+    setAttr ($geoObj + “.collisionCheck”) 1;
+    }
+    if ( ( $Id == 120) && ($geoObj == “ bucket3”) ) {
+    setAttr ($geoObj + “.collisionCheck”) 1;
+    }
+}

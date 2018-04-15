@@ -1,0 +1,59 @@
+{ 
+ global string $mcoffset;
+    proc paConstraint (){
+        global string $mcoffset;
+        string $selection[]= `ls -sl`;
+        int $size = `size $selection`;
+           
+        for ($sel =0; $sel < $size; $sel = ($sel +2)){
+            //eval string with or not offset
+            eval ("parentConstraint" + " " + $mcoffset + " " + $selection[$sel] + " " + $selection[($sel + 1)] + ";");        
+        }    
+    }
+    
+    proc oConstraint (){
+        global string $mcoffset;
+        string $selection[]= `ls -sl`;
+        int $size = `size $selection`;
+           
+        for ($sel =0; $sel < $size; $sel = ($sel +2)){
+            //eval string with or not offset
+            eval ("orientConstraint" + " " + $mcoffset + " " + $selection[$sel] + " " + $selection[($sel + 1)] + ";");        
+        }
+    }
+    
+    proc poConstraint (){
+        global string $mcoffset;
+        string $selection[]= `ls -sl`;
+        int $size = `size $selection`;
+          
+        for ($sel =0; $sel < $size; $sel = ($sel +2)){
+            //eval string with or not offset
+            eval ("pointConstraint" + " " + $mcoffset + " " + $selection[$sel] + " " + $selection[($sel + 1)] + ";");        
+        }
+    }
+    
+       
+    if (`window -ex constraintWindow`){
+        deleteUI constraintWindow;
+    }
+  //global string $mcoffset;
+    //set offset
+    
+    window -t ("multyConstraintTool") constraintWindow;
+    columnLayout;
+    checkBox -l "maintain Offset" 
+            -onc "global string $mcoffset = \"-mo\";"
+            -ofc "global string $mcoffset = \"\";";
+    button -l "ParentConstraint" -c ("paConstraint();");
+    button -l "OrientConstraint" -c ("oConstraint();");
+    button -l "PointConstraint" -c ("poConstraint();");
+   
+    
+    showWindow;
+    
+    }
+   // int $mcvalue = `checkBox -query -value $mcMoCheckB`;
+    
+    
+   // print $mcvalue;

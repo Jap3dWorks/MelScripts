@@ -1,0 +1,81 @@
+/*
+$JAHairXportSel[] = ´sl -ls´;
+
+if (`objExists HairGeometry`){
+    delete HairGeometry;
+}
+group -em -name HairGeometry;
+
+for ($HXSel in $JAHairXportSel[]){
+    select -cl;
+    $HSelB = ("/"")+($HXSel)+("/"");
+    xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 $HSelB;
+    ConvertSelectionToFaces;
+    $selectedFaces [] = `ls -sl`;
+    polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 $selectedFaces[0];
+    select -add HairGeometry ;
+    parent;
+    select -cl;
+    delete ($HXSel + ("_convert"));
+}
+*/
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandA";
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 0 -off 0 -thickness 0.02 -smoothingAngle 120 polySurface1.f[0:10619];
+//DeleteHistory;
+//delete -ch;
+select -add HairGeometry ;
+parent;
+delete StrandA_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandB"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface2.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandB_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandC"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface3.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandC_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandD"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface1.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandD_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandE"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface1.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandE_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandF"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface1.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandF_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandG"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface1.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandG_convert;
+select -cl;
+xgmGeoRender -pb  -convertSelected 0 -combineMesh 1 -useWidthRamp 1 -insertWidthSpan 0 -uvInTiles 1 -uvLayoutType 0 -uvTileSeparation 0.0 -createStripJoints 0 -createGuideJoints 0 "StrandI"; 
+//polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -pvx 2.258732706 -pvy 12.62505454 -pvz 0.01156193018 -divisions 1 -twist 0 -taper 13.3448 -off 0 -thickness 0.045 -smoothingAngle 95 polySurface1.f[0:10619];
+//DeleteHistory;
+select -add HairGeometry ;
+parent;
+delete StrandI_convert;
+select -cl;
+select -r HairGeometry polySurface1 polySurface2 polySurface3 polySurface4 polySurface5 polySurface6 polySurface7 polySurface8;
+//file -force -options "groups=1;ptgroups=1;materials=1;smoothing=1;normals=1" -typ "OBJexport" -pr -es "//malaga.virtuallylive.es/art_music/ABBA/Characters/Anni-Frid/FinalTextures/Hair/Layers/hair_High.obj";

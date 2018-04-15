@@ -1,0 +1,36 @@
+//scriptJob -listJobs; 
+/*
+int $jobNum = `scriptJob -ct "SomethingSelected" "delete" `;
+scriptJob -listJobs;
+scriptJob -kill $jobNum  -force;
+*/
+// create a sphere, but print a warning the next time it
+// is raised over 10 units high
+/*
+proc warn(){
+    float $height = `getAttr mySphere.ty`;
+    if ( $height > 10.0 ){
+        print ("Sphere is too high!\n");
+    }//end if
+}// end proc
+sphere -n mySphere;
+scriptJob -runOnce true -attributeChange mySphere.ty warn;
+
+// create a job to detect a new attribute named "tag"
+//
+global proc detectNewTagAttr() {
+    print(" New tag attribute was added\n" );
+}
+scriptJob -runOnce true -attributeAdded mySphere.tag detectNewTagAttr;
+addAttr -ln "tag" -sn "tg" -dt "string" mySphere;
+*/
+
+/*
+// list all the existing conditions and print them
+// nicely
+string $conds[] = `scriptJob -listConditions`;
+int $i;
+for ( $i=0; $i < size($conds); $i++ ){
+    print( $conds[$i]+"\n" );
+}//end for
+*/

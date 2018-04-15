@@ -1,0 +1,10 @@
+proc jaDKFramesDJInstall(){
+    if (`objExists jaDKSN`){
+        warning "jaDKSN exists yet";
+    }
+    else {
+     scriptNode  -beforeScript  "proc jaDeleteKey(){ string $dkAllObjects[] = `ls`; cutKey -clear -time \":\" $dkAllObjects; clear $dkAllObjects;} int $jaDK = `scriptJob -kws -e \"timeChanged\" \"jaDeleteKey\"`; //scriptJob -kill $jaDK  -force;" -n jaDKSN;   
+     setAttr "jaDKSN.scriptType" 1; setAttr jaDKSN.scriptType 1;
+    }
+}
+jaDKFramesDJInstall();

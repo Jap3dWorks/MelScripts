@@ -1,0 +1,31 @@
+proc jaSplnDstrInstall(){
+    string $DTag = "jaSplnDstr"; //tag of the shelf button
+    string $icLab = "jaSDstr"; //icon label
+    string $ann = "Distribute objetc or locator along any number of splines"; //annotation
+    string $shelf = "vlShelf"; //parent shelf
+    string $icon = "curveEP.png"; //icon
+    string $command = "jaSplnDstr(\n500,             //increment \n<<0, 0, 0>>,     //random position \n<<0, 0, 0>>,     //random rotation \n2, <<0, 0, 0>>,     //random scale 0-> three axis 1-> same all axis 2-> same xz axis \n\"linear\", \"linear\",     //curve type \n 1             //when live object, orientation \n);" ;//command
+    
+    if (`layout -q -ex  $shelf`){
+    //if(!(`shelfButton -q -ex -dtg "jaRanVC"`)){
+        string $vlshelfButtons[] = `shelfLayout -q -ca $shelf`;
+        int $vlExInd=0;
+        for ( $vlbutton in $vlshelfButtons ){ 
+             if((`shelfButton -q -docTag $vlbutton`) == ($DTag)){
+                 $vlExInd++;
+                 }
+             }//end for
+         if(!($vlExInd++)){
+             shelfButton -ann $ann  -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;
+             print ($DTag + " were intalled");
+             }
+         else {
+             warning ($icLab + " button is in your vlShelf yet. dick head.");
+         }
+        }
+    else{
+        addNewShelfTab  ($shelf);        
+        shelfButton -ann $ann -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;             
+        } //end else        
+    }
+jaSplnDstrInstall();

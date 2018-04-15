@@ -1,0 +1,82 @@
+global proc JADuplicateFacesTool(){
+    string $DFiniSelection[] = `ls -sl -an`;
+    string $DFFaceSelection[]; //Save Faces
+    int $DFi = 0; 
+    string $DFObjectsSelection[]; // objects with face for duplicate later
+    string $DFObjectsOnlySel[]; //Objects name only
+    int $DFOO = 0;
+    string $DFDupObj[]; //duplicatedObjects
+    int $DFDupi = 0;
+    string $DFDupFaces[]; //duplicated faces
+    int $DFDupFI = 0;
+    string $DFObndex[]; //index indicate n of object in array
+    int $DFObjIndI = 0;
+    
+    for ($DFiSel in $DFiniSelection){ //Check selection for validate
+        string $DFtypeSel[];
+        $DFNumTokens = `tokenize $DFiSel ".[]" $DFtypeSel`;
+              
+        if ($DFtypeSel[1] == "f"){         
+            //save all valid faces here
+            $DFFaceSelection[$DFi] = $DFiSel;
+            $DFi = $DFi+1;           
+        }     
+        else {            
+            warning (($DFiSel) + " " + "Cuidao que no es una cara loco" + "\n");          
+        }      
+    }
+       
+    for ($DFfSel in $DFFaceSelection){
+        string $DFtypeSel[];
+        $DFNumTokens = `tokenize $DFfSel ".[]" $DFtypeSel`; //tokenize each object
+        
+        int $ObjCheckerA = 0; //for check if obj exist in $DFObjectsOnlySel
+        
+        for ($DFObjI in $DFObjectsOnlySel){
+            if ($DFtypeSel[0] != $DFObjI){
+                $ObjCheckerA = $ObjCheckerA + 1;
+            }
+            else {
+                break;
+                //nothing here 
+            }            
+        }
+        $DFObndex[$DFObjIndI] = $ObjCheckerA;
+         print ($DFObndex[$DFObjIndI] + "\n");
+         $DFObjIndI = $DFObjIndI +1; 
+        // final check if obj is saved yet
+        int $DFOOSel = size ($DFObjectsOnlySel);
+        if ($ObjCheckerA == $DFOOSel){
+            $DFObjectsOnlySel[$DFOO] = $DFtypeSel[0];
+            $DFOO = $DFOO + 1;
+        }
+        else {
+            // no res
+        }      
+        
+    } //end for    
+    //Duplicate object
+    for ($DFDuOO in $DFObjectsOnlySel){
+        string $DFDupObjStr[];
+        $DFDupObjStr = `duplicate -rr $DFDuOO`; //duplicatedObjects
+        $DFDupObj[$DFDupi] =  $DFDupObjStr[0];
+        $DFDupi = $DFDupi +1;
+    }
+    
+   //Save DupFaces
+    for ($DFFaSelV in $DFFaceSelection){
+        string $DFFaSelTkns[];
+        $DFFaSelVNumToken = `tokenize $DFFaSelV ".[]" $DFFaSelTkns`;
+        int $DFObndexIne = ((int)$DFObndex[$DFDupFI]);
+        $DFDupFaces[$DFDupFI] = $DFDupObj[$DFObndexIne] + ".f[" + $DFFaSelTkns[2] + "]";
+        $DFDupFI = $DFDupFI + 1;
+        } //endFor
+    select -cl;
+    selectMode -object;
+    select  $DFDupObj;
+    selectMode -co;                   
+    select  $DFDupFaces;
+    InvertSelection;
+    doDelete;
+    SelectAll;    
+}

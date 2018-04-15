@@ -1,0 +1,11 @@
+        global proc jaIk(){
+    string $ikJoints[] = `ls -sl -type "joint"`;
+    if (!(size($ikJoints) == 2)){
+        print "select two joints, suker";
+    }
+    else{
+        string $ikIKhandle = `ikHandle -sj $ikJoints[0] -ee $ikJoints[1]`;
+    }
+    
+}
+jaIk();

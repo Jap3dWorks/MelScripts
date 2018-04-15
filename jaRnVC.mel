@@ -1,0 +1,75 @@
+global proc jaRnVC(vector $rnvcHSL, int $rvTot){    
+    string $ranVCSel[] = `listRelatives -s -type "mesh"`;    
+    string $renVCselComponent[] = `ls -fl -sl -type "float3"`; //component list if component is selected    
+    if (size($renVCselComponent)){
+        string $vcVertexFaceComponent[] = `polyListComponentConversion -fromVertex -fuv -ff - fe -toVertexFace $renVCselComponent`;
+        string $vcVertexFaceComponentFl[] = `ls -fl $vcVertexFaceComponent`;
+        float $rvcCComp[] = `polyColorPerVertex -q -rgb $vcVertexFaceComponentFl`; // rgb colors of faceVertex
+        if ($rvTot){
+             int $rvVFInComp = 0;
+              for ($rvIRComp = 2; $rvIRComp < (size($rvcCComp)); $rvIRComp = $rvIRComp + 3){
+                    vector $rvHSVRComp = `rand (-$rnvcHSL) $rnvcHSL`;
+                    vector $rcRGBCoComp =<<$rvcCComp[($rvIRComp - 2)], $rvcCComp[($rvIRComp - 1)], $rvcCComp[$rvIRComp]>>;
+                    vector $rcHSLCoComp = `rgb_to_hsv ($rcRGBCoComp)`;
+                    vector $rcHSLCfComp = <<(((($rcHSLCoComp.x + $rvHSVRComp.x) % 1)+1)%1), (`clamp 0 1 ($rcHSLCoComp.y + $rvHSVRComp.y)`), (`clamp 0 1 ($rcHSLCoComp.z + $rvHSVRComp.z)`)>>;                
+                    vector $rcRGBCfComp = `hsv_to_rgb ($rcHSLCfComp)`;
+                    
+                    polyColorPerVertex -rgb ($rcRGBCfComp.x) ($rcRGBCfComp.y) ($rcRGBCfComp.z) $vcVertexFaceComponentFl[$rvVFInComp];
+                    $rvVFInComp  = $rvVFInComp  +1;
+                }
+        }//end if
+        else{
+             vector $rvHSVRComp = `rand (-$rnvcHSL) $rnvcHSL`;
+             int $rvVFInComp = 0;
+              for ($rvIRComp = 2; $rvIRComp < (size($rvcCComp)); $rvIRComp = $rvIRComp + 3){
+                    vector $rcRGBCoComp =<<$rvcCComp[($rvIRComp - 2)], $rvcCComp[($rvIRComp - 1)], $rvcCComp[$rvIRComp]>>;
+                    vector $rcHSLCoComp = `rgb_to_hsv ($rcRGBCoComp)`;
+                    vector $rcHSLCfComp = <<(((($rcHSLCoComp.x + $rvHSVRComp.x) % 1)+1)%1), (`clamp 0 1 ($rcHSLCoComp.y + $rvHSVRComp.y)`), (`clamp 0 1 ($rcHSLCoComp.z + $rvHSVRComp.z)`)>>;                
+                    vector $rcRGBCfComp = `hsv_to_rgb ($rcHSLCfComp)`;
+                    
+                    polyColorPerVertex -rgb ($rcRGBCfComp.x) ($rcRGBCfComp.y) ($rcRGBCfComp.z) $vcVertexFaceComponentFl[$rvVFInComp];
+                    $rvVFInComp  = $rvVFInComp  +1;                
+                }         
+        }//end else
+ }//end if            
+    for ($rvcObj in $ranVCSel){
+        string $vcVertex[];
+        int $vcVint[] = `polyEvaluate -v $rvcObj`; //here, i give the number of vertex in the mesh
+        for($vcI =0; $vcI < $vcVint[0]; $vcI++){
+            $vcVertex[$vcI] = ($rvcObj + ".vtx[" + $vcI + "]"); //list all vertices flatten
+        }
+        string $vcVertexFace[] = `polyListComponentConversion -fromVertex -toVertexFace $vcVertex`;
+        string $vcVertexFacefl[] = `ls -fl $vcVertexFace`; 
+        clear $vcVertex;    
+        float $rvcC[] = `polyColorPerVertex -q -rgb $vcVertexFacefl`; // rgb colors of faceVertex
+        if ($rvTot){
+            int $rvVFIn = 0;
+            for ($rvIR = 2; $rvIR < (size($rvcC)); $rvIR = $rvIR + 3){
+                vector $rvHSVR = `rand (-$rnvcHSL) $rnvcHSL`;
+                vector $rcRGBCo =<<$rvcC[($rvIR - 2)], $rvcC[($rvIR - 1)], $rvcC[$rvIR]>>;
+                vector $rcHSLCo = `rgb_to_hsv ($rcRGBCo)`;
+                vector $rcHSLCf = <<(((($rcHSLCo.x + $rvHSVR.x) % 1)+1)%1), (`clamp 0 1 ($rcHSLCo.y + $rvHSVR.y)`), (`clamp 0 1 ($rcHSLCo.z + $rvHSVR.z)`)>>;                
+                vector $rcRGBCf = `hsv_to_rgb ($rcHSLCf)`;
+                
+                polyColorPerVertex -rgb ($rcRGBCf.x) ($rcRGBCf.y) ($rcRGBCf.z) $vcVertexFacefl[$rvVFIn];
+                $rvVFIn = $rvVFIn +1;
+                
+            }
+        } //end if
+        else {
+           
+            vector $rvHSVR = `rand (-$rnvcHSL) $rnvcHSL`;
+            int $rvVFIn = 0;
+            for ($rvIR = 2; $rvIR < (size($rvcC)); $rvIR = $rvIR + 3){
+                vector $rcRGBCo =<<$rvcC[($rvIR - 2)], $rvcC[($rvIR - 1)], $rvcC[$rvIR]>>;
+                vector $rcHSLCo = `rgb_to_hsv ($rcRGBCo)`;
+                vector $rcHSLCf = <<(((($rcHSLCo.x + $rvHSVR.x) % 1)+1)%1), (`clamp 0 1 ($rcHSLCo.y + $rvHSVR.y)`), (`clamp 0 1 ($rcHSLCo.z + $rvHSVR.z)`)>>;                 
+                vector $rcRGBCf = `hsv_to_rgb ($rcHSLCf)`;               
+                polyColorPerVertex -rgb ($rcRGBCf.x) ($rcRGBCf.y) ($rcRGBCf.z) $vcVertexFacefl[$rvVFIn];
+                $rvVFIn = $rvVFIn +1;
+                
+            }
+        }//end else         
+    }//end for
+   
+}

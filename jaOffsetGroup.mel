@@ -1,0 +1,35 @@
+global proc string[] jaOffsetGroup(string $ogInput[]){
+    string $osSelect[];
+    if (size ($ogInput) == 1 && $ogInput[0] == " "){
+        $osSelect = `ls -sl`;
+    }
+    else {
+        $osSelect = $ogInput; 
+
+    }
+    string $ogReturnValue[];
+    int $ogCounter = 0;
+    int $osSize = size ($osSelect);
+    if (size ($osSelect) == 0) {
+        print ("select at less one object");
+        } //end if
+    
+    else{   
+        for ($osSel in $osSelect){
+            float $osPos[] = `xform -q -os -t $osSel`;
+            float $osRot[] = `xform -q -os -ro $osSel`;
+            float $osSca[] = `xform -q -r -s $osSel`;
+        
+            string $osGroup = `group  -n ($osSel + "OG") $osSel`;
+            xform -ztp $osGroup;
+            xform -os -t $osPos[0] $osPos[1] $osPos[2] -ro $osRot[0] $osRot[1] $osRot[2] -s $osSca[0] $osSca[1] $osSca[2] $osGroup;
+            xform -os -t 0 0 0 -ro 0 0 0 -s 1 1 1 $osSel;
+            
+            $ogReturnValue[$ogCounter] = $osGroup;
+            $ogCounter++;            
+        } //end  for
+    } //end else
+    return $ogReturnValue;
+} //end proc
+//jaOffsetGroup({" "});
+//jaOffsetGroup({"curve1", "null1"});

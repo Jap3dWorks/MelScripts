@@ -1,0 +1,31 @@
+proc jaLinearRdstrInstall(){
+    string $DTag = "jaLinearRedistr"; //tag of the shelf button
+    string $icLab = "LinRdstr"; //icon label
+    string $ann = "Distribute objetc between two ojects"; //annotation
+    string $shelf = "vlShelf"; //parent shelf
+    string $icon = "alignMid.png"; //icon
+    string $command = "jaLinearRedistribute(0);" ;//command
+    
+    if (`layout -q -ex  $shelf`){
+    //if(!(`shelfButton -q -ex -dtg "jaRanVC"`)){
+        string $vlshelfButtons[] = `shelfLayout -q -ca $shelf`;
+        int $vlExInd=0;
+        for ( $vlbutton in $vlshelfButtons ){ 
+             if((`shelfButton -q -docTag $vlbutton`) == ($DTag)){
+                 $vlExInd++;
+                 }
+             }//end for
+         if(!($vlExInd++)){
+             shelfButton -ann $ann  -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;
+             print ($DTag + " were intalled");
+             }
+         else {
+             warning ($icLab + " button is in your vlShelf yet. dick head.");
+         }
+        }
+    else{
+        addNewShelfTab  ($shelf);        
+        shelfButton -ann $ann -iol $icLab -i1 $icon -dtg $DTag -c $command -p $shelf;             
+        } //end else        
+    }
+jaLinearRdstrInstall();

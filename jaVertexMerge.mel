@@ -1,0 +1,29 @@
+global proc jaVertexMerge(){
+    string $vmSelect[] = `ls -os -fl -type float3`;
+    print ($vmSelect);
+    string $vmValSel[];
+    int $vmin = 0;
+    for ($vmObj in $vmSelect){
+        string $vmtokenize[];
+        int $vmnumTokens = `tokenize $vmObj ".[]" $vmtokenize`;
+        if ($vmtokenize[1] == "vtx"){
+            $vmValSel[$vmin] = $vmObj;
+            $vmin++;
+        }
+    } //end for
+    int $vmNEl = size($vmValSel);
+    if ($vmNEl < 2){
+        print "select at least two vtx, suker";
+    }
+    else{
+        float $finalVtxPos[] = `xform -q -ws -t $vmValSel[($vmNEl)-1]`;
+        for ($vminF = 0; $vminF < (($vmNEl)-1); $vminF++){
+            xform -ws -t $finalVtxPos[0] $finalVtxPos[1] $finalVtxPos[2] $vmValSel[$vminF];
+        }// end for reposition
+        polyMergeVertex -d 0.001 $vmValSel;
+        string $vmtokenize[];
+        int $vmnumTokens = `tokenize $vmValSel[($vmNEl)-1] ".[]" $vmtokenize`;
+        delete -ch $vmtokenize[0];
+        
+    }
+}

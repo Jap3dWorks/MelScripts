@@ -1,0 +1,34 @@
+global proc jaPattEdge(){
+    string $peSel[] = `ls -fl -os -type float3`;
+    int $peEdgeIndex[];
+    int $peInd = 0;
+    int $peSSize = size($peSel);
+    
+    if ($peSSize < 2){
+        print "select two edges";
+    }
+    
+    else {
+        for ($peI = 0; $peI < 2; $peI++){
+            string $petok[];
+            int $peTokNum = `tokenize $peSel[(($peSSize-1)-$peI)] ".[]" $petok`;
+            if ($petok[1] == "e"){
+                $peEdgeIndex[$peInd] = $petok[2];
+                $peInd ++;
+                }
+            else { print ($peSel[(($peSSize-1)-$peI)] + " isn't an edge, suker. \n");}
+            }//end for
+            if (size($peEdgeIndex) == 2){
+                
+                 int $pePSLoop[] = `polySelect -lbp $peEdgeIndex[0] $peEdgeIndex[1]`;
+                
+                 if(!(size($pePSLoop))){
+                        select -r $peSel;
+                        int $pePSRing[] = `polySelect -rpt $peEdgeIndex[0] $peEdgeIndex[1]`;
+                     }
+                 select -add $peSel;  
+               }
+              
+        }//end else
+
+}
