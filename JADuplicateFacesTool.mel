@@ -1,4 +1,4 @@
-global proc JADuplicateFacesTool(){
+global proc string[] JADuplicateFacesTool(){
     string $DFiniSelection[] = `ls -sl -an`;
     string $DFFaceSelection[]; //Save Faces
     int $DFi = 0; 
@@ -78,5 +78,6 @@ global proc JADuplicateFacesTool(){
     select  $DFDupFaces;
     InvertSelection;
     doDelete;
-    SelectAll;    
+    SelectAll;
+    return $DFDupObj;  
 }

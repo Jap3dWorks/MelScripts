@@ -1,4 +1,4 @@
-global proc JAExtractFacesTool(){
+global proc string[] JAExtractFacesTool(){
     string $efiniSelection[] = `ls -sl -an`;
     string $efFaceSelection[]; //Save Faces
     int $efi = 0; 
@@ -80,5 +80,6 @@ global proc JAExtractFacesTool(){
     select  $efDupFaces;
     InvertSelection;
     doDelete;
-    SelectAll;    
+    SelectAll;
+    return $efDupObj;
 }
